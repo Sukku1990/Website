@@ -36,6 +36,7 @@ pipeline {
         stage('Run New Container') {
             steps {
                 echo "Running new container..."
+		docker rm -f $(sudo docker ps -a -q)
                 sh ' docker run -d --name mywebsite -p 82:80 website'
             }
         }
