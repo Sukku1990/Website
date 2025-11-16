@@ -13,7 +13,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image..."
-                sh 'sudo docker build -t website .'
+                sh ' docker build -t website .'
             }
         }
 
@@ -25,8 +25,8 @@ pipeline {
                     // If container exists, stop & remove it
                     sh '''
                     if [ "$(sudo docker ps -aq -f name=mywebsite)" ]; then
-                        sudo docker stop mywebsite || true
-                        sudo docker rm mywebsite || true
+                         docker stop mywebsite || true
+                         docker rm mywebsite || true
                     fi
                     '''
                 }
@@ -36,7 +36,7 @@ pipeline {
         stage('Run New Container') {
             steps {
                 echo "Running new container..."
-                sh 'sudo docker run -d --name mywebsite -p 82:80 website'
+                sh ' docker run -d --name mywebsite -p 82:80 website'
             }
         }
     }
