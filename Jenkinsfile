@@ -1,5 +1,10 @@
 pipeline {
     agent any
+	environment {
+        EC2_USER = "ubuntu"
+        EC2_HOST = "18.232.147.229"
+        SSH_KEY  = "ec2-ssh-key"     // Jenkins Credential ID
+    }
 
     stages {
 
@@ -17,36 +22,51 @@ pipeline {
             }
         }
 
-        stage('Stop Old Container') {
+        stage('Transfer Code to EC2') {
             steps {
-                script {
-                    echo "Stopping old container if running..."
-
-                    // If container exists, stop & remove it
-                    sh '''
-                    if [ "$(sudo docker ps -aq -f name=website)" ]; then
-                         docker stop website || true
-                         docker rm website || true
-                    fi
-                    '''
+                echo "Copying app files to EC2..."
+                sshagent(credentials: ["${SSH_KEY}"]) {
+                    sh """
+                        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ \
+                        ${EC2_USER}@${EC2_HOST}:/home/ubuntu/website/
+                    """
                 }
             }
         }
 
-        stage('Run New Container') {
+        stage('Deploy on EC2') {
             steps {
-                echo "Running new container..."
-                sh ' docker run -d --name website -p 82:80 website'
+                echo "Deploying Docker container on EC2..."
+                sshagent(credentials: ["${SSH_KEY}"]) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} '
+                        cd /home/ubuntu/website &&
+                        
+                        echo "Stopping old container..." &&
+                        sudo docker stop website || true &&
+                        sudo docker rm website || true &&
+                        
+                        echo "Building image on EC2..." &&
+                        sudo docker build -t website . &&
+                        
+                        echo "Running new container..." &&
+                        sudo docker run -d --name website -p 82:80 website
+                    '
+                    """
+                }
             }
         }
     }
 
-    post {
+
+
+post {
+
         success {
-            echo "Deployment successful!"
+            echo "🎉 SUCCESS: Deployment completed! Access your site at http://18.232.147.229:82/"
         }
+
         failure {
-            echo "Deployment failed!"
+            echo "❌ FAILURE: Something went wrong during deployment."
         }
-    }
 }
