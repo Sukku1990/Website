@@ -24,9 +24,9 @@ pipeline {
 
                     // If container exists, stop & remove it
                     sh '''
-                    if [ "$(sudo docker ps -aq -f name=mywebsite)" ]; then
-                         docker stop mywebsite || true
-                         docker rm mywebsite || true
+                    if [ "$(sudo docker ps -aq -f name=website)" ]; then
+                         docker stop website || true
+                         docker rm website || true
                     fi
                     '''
                 }
@@ -36,8 +36,7 @@ pipeline {
         stage('Run New Container') {
             steps {
                 echo "Running new container..."
-		docker rm -f $(sudo docker ps -a -q)
-                sh ' docker run -d --name mywebsite -p 82:80 website'
+                sh ' docker run -d --name website -p 82:80 website'
             }
         }
     }
