@@ -57,17 +57,4 @@ pipeline {
             }
         }
     }
-
-
-
-post {
-
-        success {
-            echo "🎉 SUCCESS: Deployment completed! Access your site at http://18.232.147.229:82/"
-        }
-
-        failure {
-            echo "❌ FAILURE: Something went wrong during deployment."
-        }
-}
 }
