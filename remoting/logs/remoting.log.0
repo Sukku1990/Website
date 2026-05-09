@@ -1,0 +1,10 @@
+May 09, 2026 7:05:37 PM hudson.remoting.Launcher createEngine
+INFO: Setting up agent: Production
+May 09, 2026 7:05:37 PM hudson.remoting.Engine startEngine
+INFO: Using Remoting version: 3345.v03dee9b_f88fc
+May 09, 2026 7:05:37 PM org.jenkinsci.remoting.engine.WorkDirManager initializeWorkDir
+INFO: Using /home/ubuntu/website/remoting as a remoting work directory
+May 09, 2026 7:05:38 PM hudson.remoting.Launcher$CuiListener status
+INFO: WebSocket connection open
+May 09, 2026 7:05:38 PM hudson.remoting.Launcher$CuiListener status
+INFO: Connected
