@@ -63,9 +63,11 @@ pipeline {
 
                     echo "Running new container..." &&
                     sudo docker run -d \
-                        --name website \
-                        -p 82:80 \
-                        website
+                    --restart unless-stopped \
+                    --name website \
+                    -p 82:80 \
+                    website
+
                     '
                     """
                 }
