@@ -2,7 +2,7 @@ pipeline {
     agent any
 	environment {
         EC2_USER = "ubuntu"
-        EC2_HOST = "52.21.230.67"
+        EC2_HOST = "34.202.236.240"
         SSH_KEY  = "ec2-ssh-key"     // Jenkins Credential ID
     }
 
